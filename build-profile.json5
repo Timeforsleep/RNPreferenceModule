@@ -1,0 +1,50 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "/Users/autohome/.ohos/config/default_RNPreferenceModule_SQGrPYTgIKfAozmzKdx_kW5YU82Ppx5mBoRGmBUF0ts=.cer",
+          "storePassword": "0000001BC131C5B18AA7632DE813774A324FB3D1AAE1F9ADF650C0741F0E7670F1C1E3785A6517A664CA32",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001BE1150B7F116E18BD85924DBD48EC6DF5493EFEFD49586084322AE174D6F45136E1D241FF4F74E5",
+          "profile": "/Users/autohome/.ohos/config/default_RNPreferenceModule_SQGrPYTgIKfAozmzKdx_kW5YU82Ppx5mBoRGmBUF0ts=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/autohome/.ohos/config/default_RNPreferenceModule_SQGrPYTgIKfAozmzKdx_kW5YU82Ppx5mBoRGmBUF0ts=.p12"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "compileSdkVersion": "4.1.0(11)",
+        "compatibleSdkVersion": "4.1.0(11)",
+        "runtimeOS": "HarmonyOS",
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}
