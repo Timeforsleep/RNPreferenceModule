@@ -1,10 +1,17 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
+// 导入模块
+import distributedKVStore from '@ohos.data.distributedKVStore';
+
+import { KVDatabase } from '../db/KVDatabase';
+
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+    let context = this.context;
+    KVDatabase.initDataBase(context,KVDatabase.instance)//初始化数据库
   }
 
   onDestroy(): void {
@@ -39,3 +46,4 @@ export default class EntryAbility extends UIAbility {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onBackground');
   }
 }
+
