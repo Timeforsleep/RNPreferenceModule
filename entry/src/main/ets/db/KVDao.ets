@@ -7,11 +7,15 @@ export class KVDao {
   private constructor() {
   }
 
-  static put(key: string, value: string) {
+  static async put(key: string, value: string) {
     if (KVStoreSingleton.instance) {
-      // const KEY_TEST_STRING_ELEMENT = 'key_test_string';
-      // const VALUE_TEST_STRING_ELEMENT = 'value_test_string';
       try {
+        await KVStoreSingleton.instance.startTransaction()
+        // .then((result) => {
+        //   console.log(`gyk${result}`)
+        // }).catch((error: undefined) => {
+        //   console.error(`gyk${error}`)
+        // })
         KVStoreSingleton.instance.put(key, value, (err) => {
           if (err !== undefined) {
             console.error(`Failed to put data. Code:${err.code},message:${err.message}`);
@@ -19,17 +23,20 @@ export class KVDao {
           }
           console.info('Succeeded in putting data.');
         });
-      } catch (e) {
+      }
+      catch (e) {
+        await KVStoreSingleton.instance.rollback()
         let error = e as BusinessError;
         console.error(`An unexpected error occurred. Code:${error.code},message:${error.message}`);
       }
     }
   }
 
-  static get(key: string) {
+
+  static async get(key: string) {
     if (KVStoreSingleton.instance) {
       try {
-
+        await KVStoreSingleton.instance.startTransaction()
         // KVStoreSingleton.instance.put(key, value, (err) => {
         //   if (err !== undefined) {
         //     console.error(`Failed to put data. Code:${err.code},message:${err.message}`);
@@ -48,15 +55,16 @@ export class KVDao {
 
       } catch (e) {
         let error = e as BusinessError;
+        await KVStoreSingleton.instance.rollback()
         console.error(`Failed to get data. Code:${error.code},message:${error.message}`);
       }
     }
   }
 
-  static delete(key: string) {
+  static async delete(key: string) {
     if (KVStoreSingleton.instance) {
       try {
-
+        await KVStoreSingleton.instance.startTransaction()
         // KVStoreSingleton.instance.put(key, value, (err) => {
         //   if (err !== undefined) {
         //     console.error(`Failed to put data. Code:${err.code},message:${err.message}`);
@@ -75,15 +83,17 @@ export class KVDao {
 
       } catch (e) {
         let error = e as BusinessError;
+        await KVStoreSingleton.instance.rollback()
         console.error(`An unexpected error occurred. Code:${error.code},message:${error.message}`);
       }
     }
   }
 
-  static backup() {
+  static async backup() {
     let file = 'BK001';
     if (KVStoreSingleton.instance) {
       try {
+        await KVStoreSingleton.instance.startTransaction()
         KVStoreSingleton.instance.backup(file, (err) => {
           if (err) {
             console.error(`Fail to backup data.code:${err.code},message:${err.message}`);
@@ -92,13 +102,15 @@ export class KVDao {
           }
         });
       } catch (e) {
+        await KVStoreSingleton.instance.rollback()
         console.error(`An unexpected error occurred. Code:${e.code},message:${e.message}`);
       }
     }
   }
 
-  static restore() {
+  static async restore() {
     if (KVStoreSingleton.instance) {
+      await KVStoreSingleton.instance.startTransaction()
       let file = 'BK001';
       try {
         KVStoreSingleton.instance.restore(file, (err) => {
@@ -109,6 +121,7 @@ export class KVDao {
           }
         });
       } catch (e) {
+        await KVStoreSingleton.instance.rollback()
         console.error(`An unexpected error occurred. Code:${e.code},message:${e.message}`);
       }
     }

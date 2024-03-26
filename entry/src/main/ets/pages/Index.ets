@@ -13,9 +13,6 @@ struct Index {
   build() {
     Row() {
       Column() {
-        // Text(this.message)
-        //   .fontSize(50)
-        //   .fontWeight(FontWeight.Bold)
         Button("put").onClick(()=>{
           KVDao.put("郭逸楷","帅哥")
         })
