@@ -11,7 +11,7 @@ export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
     let context = this.context;
-    KVDatabase.initDataBase(context,KVDatabase.instance)//初始化数据库
+    KVDatabase.initDataBase(context)//初始化数据库
   }
 
   onDestroy(): void {

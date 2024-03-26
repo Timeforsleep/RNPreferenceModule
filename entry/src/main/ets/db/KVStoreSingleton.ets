@@ -3,7 +3,7 @@ import distributedKVStore from '@ohos.data.distributedKVStore';
 import { KVDatabase } from './KVDatabase';
 import { BusinessError } from '@ohos.base'
 
-export class KVStoreSingleton {
+class KVStoreSingleton {
   static instance: distributedKVStore.SingleKVStore | undefined = undefined;
 
   private constructor() {
@@ -39,4 +39,6 @@ export class KVStoreSingleton {
     }
   }
 }
+
+export { KVStoreSingleton }
 
