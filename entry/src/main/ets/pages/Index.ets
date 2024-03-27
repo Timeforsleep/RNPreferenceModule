@@ -16,52 +16,80 @@ struct Index {
       Column({space:5}) {
         if (typeof this.data==='string'){
           Text(this.data)
-            .fontSize(50)
+            .fontSize(30)
             .fontWeight(FontWeight.Bold)
         }
-        Button("put[郭逸楷:帅哥]").onClick(()=>{
-          KVDao.put("郭逸楷","帅哥").then(()=>{
-            KVDao.get("郭逸楷").then(data=>{
+        Button("put[person:AutoHome]").onClick(()=>{
+          KVDao.setItem("person","AutoHome").then(()=>{
+            KVDao.getItem("person").then(data=>{
               this.data = data
             })
           })
         })
-        Button("get[郭逸楷]").onClick(()=>{
-          KVDao.get("郭逸楷").then(data=>{
+        Button("get[person]").onClick(()=>{
+          KVDao.getItem("person").then(data=>{
             this.data = data
           })
         })
-        Button("delete[郭逸楷]").onClick(()=>{
-          KVDao.delete("郭逸楷").then(()=>{
-            KVDao.get("郭逸楷").then(data=>{
+        Button("delete[person]").onClick(()=>{
+          KVDao.removeItem("person").then(()=>{
+            KVDao.getItem("person").then(data=>{
               this.data = data
             })
           })
         })
         Button("backup[版本0.0.1]").onClick(()=>{
           KVDao.backup("0.0.1").then(()=>{
-            KVDao.get("郭逸楷").then(data=>{
+            KVDao.getItem("person").then(data=>{
               this.data = data
             })
           })
         })
         Button("backup[版本0.0.2]").onClick(()=>{
           KVDao.backup("0.0.2").then(()=>{
-            KVDao.get("郭逸楷").then(data=>{
+            KVDao.getItem("person").then(data=>{
               this.data = data
             })
           })
         })
-        Button("restore[版本0.0.1]").onClick(()=>{
-          KVDao.restore("0.0.1").then(()=>{
-            KVDao.get("郭逸楷").then(data=>{
+        Button("rollback[版本0.0.1]").onClick(()=>{
+          KVDao.rollback("0.0.1").then(()=>{
+            KVDao.getItem("person").then(data=>{
               this.data = data
             })
           })
         })
-        Button("restore[版本0.0.2]").onClick(()=>{
-          KVDao.restore("0.0.2").then(()=>{
-            KVDao.get("郭逸楷").then(data=>{
+        Button("rollback[版本0.0.2]").onClick(()=>{
+          KVDao.rollback("0.0.2").then(()=>{
+            KVDao.getItem("person").then(data=>{
+              this.data = data
+            })
+          })
+        })
+        Button("rollback[版本0.0.3]").onClick(()=>{
+          KVDao.rollback("0.0.3").then(()=>{
+            KVDao.getItem("person").then(data=>{
+              this.data = data
+            })
+          })
+        })
+        Button("backup[版本0.0.3]").onClick(()=>{
+          KVDao.backup("0.0.3").then(()=>{
+            KVDao.getItem("person").then(data=>{
+              this.data = data
+            })
+          })
+        })
+        Button("backup[版本0.0.a]").onClick(()=>{
+          KVDao.backup("0.0.a").then(()=>{
+            KVDao.getItem("person").then(data=>{
+              this.data = data
+            })
+          })
+        })
+        Button("rollback[版本0.0.1a]").onClick(()=>{
+          KVDao.rollback("0.0.1a").then(()=>{
+            KVDao.getItem("person").then(data=>{
               this.data = data
             })
           })
