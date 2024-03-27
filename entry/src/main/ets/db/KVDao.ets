@@ -7,123 +7,129 @@ export class KVDao {
   private constructor() {
   }
 
-  static async put(key: string, value: string) {
-    if (KVStoreSingleton.instance) {
+  static put(key: string, value: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (!KVStoreSingleton.instance) {
+        return reject(new Error('KVStoreSingleton instance not available.'));
+      }
+
       try {
-        await KVStoreSingleton.instance.startTransaction()
-        // .then((result) => {
-        //   console.log(`gyk${result}`)
-        // }).catch((error: undefined) => {
-        //   console.error(`gyk${error}`)
-        // })
         KVStoreSingleton.instance.put(key, value, (err) => {
           if (err !== undefined) {
-            console.error(`Failed to put data. Code:${err.code},message:${err.message}`);
-            return;
+            reject(err);
+          } else {
+            console.info('Succeeded in putting data.');
+            resolve();
           }
-          console.info('Succeeded in putting data.');
         });
-      }
-      catch (e) {
-        await KVStoreSingleton.instance.rollback()
+      } catch (e) {
+        // 捕获同步异常并拒绝Promise
         let error = e as BusinessError;
         console.error(`An unexpected error occurred. Code:${error.code},message:${error.message}`);
+        reject(error);
       }
-    }
+    });
   }
 
+  static get(key: string): Promise<string | number | boolean | Uint8Array | undefined> {
+    return new Promise((resolve, reject) => {
+      if (!KVStoreSingleton.instance) {
+        return resolve(undefined);
+      }
 
-  static async get(key: string) {
-    if (KVStoreSingleton.instance) {
-      try {
-        await KVStoreSingleton.instance.startTransaction()
-        // KVStoreSingleton.instance.put(key, value, (err) => {
-        //   if (err !== undefined) {
-        //     console.error(`Failed to put data. Code:${err.code},message:${err.message}`);
-        //     return;
-        //   }
-        //   console.info('Succeeded in putting data.');
-        //   KVStoreSingleton.instance = KVStoreSingleton.instance as distributedKVStore.SingleKVStore;
-        KVStoreSingleton.instance.get(key, (err, data) => {
-          if (err != undefined) {
-            console.error(`Failed to get data. Code:${err.code},message:${err.message}`);
-            return;
-          }
+      KVStoreSingleton.instance.get(key, (err, data) => {
+        if (err != undefined) {
+          console.error(`Failed to get data. Code:${err.code},message:${err.message}`);
+          resolve(undefined); // or reject(err) if you want to propagate the error
+        } else {
           console.info(`Succeeded in getting data. Data:${data}`);
-        });
-        // });
-
-      } catch (e) {
-        let error = e as BusinessError;
-        await KVStoreSingleton.instance.rollback()
-        console.error(`Failed to get data. Code:${error.code},message:${error.message}`);
-      }
-    }
+          resolve(data);
+        }
+      });
+    });
   }
 
-  static async delete(key: string) {
-    if (KVStoreSingleton.instance) {
+  static delete(key: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (!KVStoreSingleton.instance) {
+        // 如果没有实例，直接拒绝Promise
+        return reject(new Error('KVStoreSingleton instance not available.'));
+      }
+
       try {
-        await KVStoreSingleton.instance.startTransaction()
-        // KVStoreSingleton.instance.put(key, value, (err) => {
-        //   if (err !== undefined) {
-        //     console.error(`Failed to put data. Code:${err.code},message:${err.message}`);
-        //     return;
-        //   }
-        //   console.info('Succeeded in putting data.');
-        // KVStoreSingleton.instance = KVStoreSingleton.instance as distributedKVStore.SingleKVStore;
         KVStoreSingleton.instance.delete(key, (err) => {
           if (err !== undefined) {
             console.error(`Failed to delete data. Code:${err.code},message:${err.message}`);
-            return;
+            // 使用错误信息拒绝Promise
+            reject(err);
+          } else {
+            console.info('Succeeded in deleting data.');
+            // 成功执行了操作，解决Promise
+            resolve();
           }
-          console.info('Succeeded in deleting data.');
         });
-        // });
-
       } catch (e) {
+        // 捕获同步异常并拒绝Promise
         let error = e as BusinessError;
-        await KVStoreSingleton.instance.rollback()
         console.error(`An unexpected error occurred. Code:${error.code},message:${error.message}`);
+        reject(error);
       }
-    }
+    });
   }
 
-  static async backup() {
-    let file = 'BK001';
-    if (KVStoreSingleton.instance) {
+  static backup(version: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (!KVStoreSingleton.instance) {
+        // 如果没有KVStoreSingleton实例，则直接拒绝Promise
+        return reject(new Error('KVStoreSingleton instance not available.'));
+      }
+
+      let file = `BK${version}`;
       try {
-        await KVStoreSingleton.instance.startTransaction()
         KVStoreSingleton.instance.backup(file, (err) => {
           if (err) {
-            console.error(`Fail to backup data.code:${err.code},message:${err.message}`);
+            console.error(`Fail to backup data. Code:${err.code},message:${err.message}`);
+            // 使用错误信息拒绝Promise
+            reject(err);
           } else {
-            console.info('Succeeded in backupping data.');
+            console.info(`Succeeded in backing up data: ${version}`);
+            // 成功执行了操作，解决Promise
+            resolve();
           }
         });
       } catch (e) {
-        await KVStoreSingleton.instance.rollback()
+        // 捕获同步异常并拒绝Promise
         console.error(`An unexpected error occurred. Code:${e.code},message:${e.message}`);
+        reject(e);
       }
-    }
+    });
   }
 
-  static async restore() {
-    if (KVStoreSingleton.instance) {
-      await KVStoreSingleton.instance.startTransaction()
-      let file = 'BK001';
+  static restore(version: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (!KVStoreSingleton.instance) {
+        // 如果没有KVStoreSingleton实例，则直接拒绝Promise
+        return reject(new Error('KVStoreSingleton instance not available.'));
+      }
+
+      let file = `BK${version}`;
       try {
         KVStoreSingleton.instance.restore(file, (err) => {
           if (err) {
             console.error(`Fail to restore data. Code:${err.code},message:${err.message}`);
+            // 使用错误信息拒绝Promise
+            reject(err);
           } else {
-            console.info('Succeeded in restoring data.');
+            console.info(`Succeeded in restoring data version ${version}`);
+            // 成功执行了操作，解决Promise
+            resolve();
           }
         });
       } catch (e) {
-        await KVStoreSingleton.instance.rollback()
+        // 捕获同步异常并拒绝Promise
         console.error(`An unexpected error occurred. Code:${e.code},message:${e.message}`);
+        reject(e);
       }
-    }
+    });
   }
 }
