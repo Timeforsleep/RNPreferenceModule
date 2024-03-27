@@ -20,7 +20,11 @@ struct Index {
             .fontWeight(FontWeight.Bold)
         }
         Button("put[郭逸楷:帅哥]").onClick(()=>{
-          KVDao.put("郭逸楷","帅哥")
+          KVDao.put("郭逸楷","帅哥").then(()=>{
+            KVDao.get("郭逸楷").then(data=>{
+              this.data = data
+            })
+          })
         })
         Button("get[郭逸楷]").onClick(()=>{
           KVDao.get("郭逸楷").then(data=>{
@@ -28,19 +32,39 @@ struct Index {
           })
         })
         Button("delete[郭逸楷]").onClick(()=>{
-          KVDao.delete("郭逸楷")
+          KVDao.delete("郭逸楷").then(()=>{
+            KVDao.get("郭逸楷").then(data=>{
+              this.data = data
+            })
+          })
         })
         Button("backup[版本0.0.1]").onClick(()=>{
-          KVDao.backup("0.0.1")
+          KVDao.backup("0.0.1").then(()=>{
+            KVDao.get("郭逸楷").then(data=>{
+              this.data = data
+            })
+          })
         })
         Button("backup[版本0.0.2]").onClick(()=>{
-          KVDao.backup("0.0.2")
+          KVDao.backup("0.0.2").then(()=>{
+            KVDao.get("郭逸楷").then(data=>{
+              this.data = data
+            })
+          })
         })
         Button("restore[版本0.0.1]").onClick(()=>{
-          KVDao.restore("0.0.1")
+          KVDao.restore("0.0.1").then(()=>{
+            KVDao.get("郭逸楷").then(data=>{
+              this.data = data
+            })
+          })
         })
         Button("restore[版本0.0.2]").onClick(()=>{
-          KVDao.restore("0.0.2")
+          KVDao.restore("0.0.2").then(()=>{
+            KVDao.get("郭逸楷").then(data=>{
+              this.data = data
+            })
+          })
         })
       }
       .width('100%')
