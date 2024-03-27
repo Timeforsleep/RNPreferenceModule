@@ -5,6 +5,7 @@ import { KVStoreSingleton } from '../db/KVStoreSingleton'
 @Component
 struct Index {
   // @State message: string = 'Hello World';
+  @State data:string | number | boolean | Uint8Array | undefined = undefined
 
   aboutToAppear(): void {
     KVStoreSingleton.initKvStore()
@@ -12,24 +13,34 @@ struct Index {
 
   build() {
     Row() {
-      Column() {
-        // Text(this.message)
-        //   .fontSize(50)
-        //   .fontWeight(FontWeight.Bold)
-        Button("put").onClick(()=>{
+      Column({space:5}) {
+        if (typeof this.data==='string'){
+          Text(this.data)
+            .fontSize(50)
+            .fontWeight(FontWeight.Bold)
+        }
+        Button("put[郭逸楷:帅哥]").onClick(()=>{
           KVDao.put("郭逸楷","帅哥")
         })
-        Button("get").onClick(()=>{
-          KVDao.get("郭逸楷")
+        Button("get[郭逸楷]").onClick(()=>{
+          KVDao.get("郭逸楷").then(data=>{
+            this.data = data
+          })
         })
-        Button("delete").onClick(()=>{
+        Button("delete[郭逸楷]").onClick(()=>{
           KVDao.delete("郭逸楷")
         })
-        Button("backup").onClick(()=>{
-          KVDao.backup()
+        Button("backup[版本0.0.1]").onClick(()=>{
+          KVDao.backup("0.0.1")
         })
-        Button("restore").onClick(()=>{
-          KVDao.restore()
+        Button("backup[版本0.0.2]").onClick(()=>{
+          KVDao.backup("0.0.2")
+        })
+        Button("restore[版本0.0.1]").onClick(()=>{
+          KVDao.restore("0.0.1")
+        })
+        Button("restore[版本0.0.2]").onClick(()=>{
+          KVDao.restore("0.0.2")
         })
       }
       .width('100%')
